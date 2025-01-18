@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="menu-toggle">☰</button>
+    <div id="sidebar" class="sidebar">
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+    </div>
+    <div class="content">
+        <h1>Cartas</h1>
+        <div class="cards">
+            <div class="card">
+                <h3>Palavra 1</h3>
+                <p>Definição em inglês</p>
+                <p>Exemplos</p>
+            </div>
+            <div class="card">
+                <h3>Palavra 2</h3>
+                <p>Definição em inglês</p>
+                <p>Exemplos</p>
+            </div>
+            <div class="card">
+                <h3>Palavra 3</h3>
+                <p>Definição em inglês</p>
+                <p>Exemplos</p>
+            </div>
+        </div>
+        <h2>Adicionar Nova Carta</h2>
+        <form id="add-card-form">
+            <label for="word">Palavra:</label>
+            <input type="text" id="word" name="word" required>
+            <br>
+            <label for="meaning">Definição em inglês:</label>
+            <input type="text" id="meaning" name="meaning" required>
+            <br>
+            <label for="example">Exemplos:</label>
+            <input type="text" id="example" name="example" required>
+            <br>
+            <button type="submit">Adicionar Carta</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="script.js"></script>
+    <script type="module" src="mainWindows.js"></script>
+
+</body>
+</html>
