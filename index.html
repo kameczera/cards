@@ -5,32 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cartas</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="cartas.css">
 </head>
 <body>
-    <button id="menu-toggle">☰</button>
-    <div id="sidebar" class="sidebar">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-    </div>
     <div class="content">
         <h1>Cartas</h1>
+        <form id="search-card-form">
+            <label for="search-word">Procurar Palavra:</label>
+            <input type="text" id="search-word" name="search-word">
+            <button type="submit">Procurar</button>
+        </form>
         <div class="cards">
-            <div class="card">
-                <h3>Palavra 1</h3>
-                <p>Definição em inglês</p>
-                <p>Exemplos</p>
-            </div>
-            <div class="card">
-                <h3>Palavra 2</h3>
-                <p>Definição em inglês</p>
-                <p>Exemplos</p>
-            </div>
-            <div class="card">
-                <h3>Palavra 3</h3>
-                <p>Definição em inglês</p>
-                <p>Exemplos</p>
-            </div>
         </div>
         <h2>Adicionar Nova Carta</h2>
         <form id="add-card-form">
@@ -49,6 +34,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="script.js"></script>
     <script type="module" src="mainWindows.js"></script>
-
 </body>
 </html>

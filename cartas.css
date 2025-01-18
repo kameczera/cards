@@ -1,0 +1,67 @@
+/* General button styles */
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Edit button styles */
+button.edit-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+/* Delete button styles */
+button.delete-button {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+/* Card container styles */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Card content styles */
+.card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Button container styles */
+.card-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Form styles */
+form input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #111;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #333;
+}

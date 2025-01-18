@@ -11,44 +11,35 @@ document.getElementById('add-card-form').addEventListener('submit', async functi
     const meaning = document.getElementById('meaning').value;
     const example = document.getElementById('example').value;
 
-
     const { data, error } = await supabase
         .from('cards')
         .insert([
             { word: word, meaning: meaning, example: example },
-        ])
-        .select()
+        ]);
 
     if (error) {
         console.error('Erro ao adicionar carta:', error);
         return;
     }
 
-    const cardContainer = document.createElement('div');
-    cardContainer.classList.add('card');
-
-    const cardWord = document.createElement('h3');
-    cardWord.textContent = word;
-    cardContainer.appendChild(cardWord);
-
-    const cardMeaning = document.createElement('p');
-    cardMeaning.textContent = meaning;
-    cardContainer.appendChild(cardMeaning);
-
-    const cardExample = document.createElement('p');
-    cardExample.textContent = example;
-    cardContainer.appendChild(cardExample);
-
-    document.querySelector('.content').appendChild(cardContainer);
-
-    document.getElementById('add-card-form').reset();
     fetchData();
+    document.getElementById('add-card-form').reset();
 });
 
-async function fetchData() {
-    const { data, error } = await supabase
-        .from('cards')
-        .select('*');
+document.getElementById('search-card-form').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const searchWord = document.getElementById('search-word').value;
+    fetchData(searchWord);
+});
+
+async function fetchData(searchWord = '') {
+    let query = supabase.from('cards').select('*');
+    if (searchWord) {
+        query = query.ilike('word', `%${searchWord}%`);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         console.error('Erro ao buscar dados:', error);
@@ -62,18 +53,97 @@ async function fetchData() {
         const cardContainer = document.createElement('div');
         cardContainer.classList.add('card');
 
+        const cardContent = document.createElement('div');
+        cardContent.classList.add('card-content');
+
         const cardWord = document.createElement('h3');
         cardWord.textContent = card.word;
-        cardContainer.appendChild(cardWord);
+        cardContent.appendChild(cardWord);
 
         const cardMeaning = document.createElement('p');
         cardMeaning.textContent = card.meaning;
-        cardContainer.appendChild(cardMeaning);
+        cardContent.appendChild(cardMeaning);
 
         const cardExample = document.createElement('p');
         cardExample.textContent = card.example;
-        cardContainer.appendChild(cardExample);
+        cardContent.appendChild(cardExample);
+
+        const cardButtons = document.createElement('div');
+        cardButtons.classList.add('card-buttons');
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.classList.add('edit-button');
+        editButton.addEventListener('click', () => enableEditMode(cardContainer, card));
+        cardButtons.appendChild(editButton);
+
+        // Create delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Excluir';
+        deleteButton.classList.add('delete-button');
+        deleteButton.addEventListener('click', () => deleteCard(card.id));
+        cardButtons.appendChild(deleteButton);
+
+        cardContainer.appendChild(cardContent);
+        cardContainer.appendChild(cardButtons);
 
         cardsContainer.appendChild(cardContainer);
     });
 }
+
+function enableEditMode(cardContainer, card) {
+    const cardContent = cardContainer.querySelector('.card-content');
+    cardContent.innerHTML = '';
+
+    const wordInput = document.createElement('input');
+    wordInput.type = 'text';
+    wordInput.value = card.word;
+    cardContent.appendChild(wordInput);
+
+    const meaningInput = document.createElement('input');
+    meaningInput.type = 'text';
+    meaningInput.value = card.meaning;
+    cardContent.appendChild(meaningInput);
+
+    const exampleInput = document.createElement('input');
+    exampleInput.type = 'text';
+    exampleInput.value = card.example;
+    cardContent.appendChild(exampleInput);
+
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Salvar';
+    saveButton.addEventListener('click', () => saveCard(card.id, wordInput.value, meaningInput.value, exampleInput.value));
+    cardContent.appendChild(saveButton);
+}
+
+async function saveCard(id, newWord, newMeaning, newExample) {
+    const { data, error } = await supabase
+        .from('cards')
+        .update({ word: newWord, meaning: newMeaning, example: newExample })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Erro ao editar carta:', error);
+        return;
+    }
+
+    fetchData();
+}
+
+async function deleteCard(id) {
+    const { data, error } = await supabase
+        .from('cards')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error('Erro ao excluir carta:', error);
+        return;
+    }
+
+    fetchData();
+}
+
+// Initial fetch to populate the cards on page load
+fetchData();
