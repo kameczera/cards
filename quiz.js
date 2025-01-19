@@ -12,20 +12,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    const shuffledCards = cards.sort(() => 0.5 - Math.random()).slice(0, 5); // Get 5 random cards
+    const shuffledCards = cards.sort(() => 0.5 - Math.random()).slice(0, 5); // Obtem 5 cartas aleatórias
     let currentQuestionIndex = 0;
     let score = 0;
 
     const quizForm = document.getElementById('quiz-form');
     const resultDiv = document.getElementById('result');
-    const submitButton = document.getElementById('submit-quiz');
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Próxima';
+    nextButton.style.display = 'none';
+    nextButton.addEventListener('click', showNextQuestion);
+
+    document.body.appendChild(nextButton); // Garante que o botão é sempre anexado ao DOM
 
     function showQuestion(index) {
-        quizForm.innerHTML = ''; // Clear existing question
+        quizForm.innerHTML = ''; // Limpa a pergunta anterior
+        nextButton.style.display = 'none'; // Oculta o botão Próxima
+        resultDiv.textContent = ''; // Limpa resultados anteriores
 
         if (index >= shuffledCards.length) {
             resultDiv.textContent = `Você acertou ${score} de ${shuffledCards.length} perguntas.`;
-            submitButton.style.display = 'none';
+            nextButton.style.display = 'none'; // Oculta o botão após o fim do quiz
             return;
         }
 
@@ -69,11 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             answerButton.classList.add('answer-button');
             answerButton.textContent = answer;
             answerButton.addEventListener('click', () => {
-                if (answer === correctAnswer) {
-                    score++;
-                }
-                currentQuestionIndex++;
-                showQuestion(currentQuestionIndex);
+                handleAnswerClick(answer, correctAnswer);
             });
 
             questionDiv.appendChild(answerButton);
@@ -82,10 +85,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         quizForm.appendChild(questionDiv);
     }
 
-    submitButton.addEventListener('click', () => {
+    function handleAnswerClick(selectedAnswer, correctAnswer) {
+        quizForm.innerHTML = ''; // Remove os botões de resposta
+
+        // Exibe o feedback da resposta
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.innerHTML = `
+            <p>Você escolheu: <strong>${selectedAnswer}</strong></p>
+            <p>Resposta correta: <strong>${correctAnswer}</strong></p>
+        `;
+        quizForm.appendChild(feedbackDiv);
+
+        // Atualiza a pontuação se a resposta estiver correta
+        if (selectedAnswer === correctAnswer) {
+            score++;
+        }
+
+        // Exibe o botão "Próxima"
+        nextButton.style.display = 'block';
+    }
+
+    function showNextQuestion() {
         currentQuestionIndex++;
         showQuestion(currentQuestionIndex);
-    });
+    }
 
-    showQuestion(currentQuestionIndex); // Show the first question
+    showQuestion(currentQuestionIndex); // Exibe a primeira pergunta
 });
